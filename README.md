@@ -23,6 +23,7 @@ After the installation process, you need to meet a series of hardware and softwa
 - The user "root" available to run the installer (only works with root user)
 ##Hardware installation and wiring
 You can follow the image below.
+
 |  SSD1306  | Raspberry PI  |
 | :------------: | :------------: |
 |  VCC |  5V (can be on 3v3)  |
@@ -30,8 +31,7 @@ You can follow the image below.
 |  SCK |  SCK (GPIO3)  |
 |  SDA | SDA (GPIO2)  |
 
-
-[![Fritzing wiring diagram](github "Fritzing wiring diagram")](https://github.com/weto91/OledInfo-Raspberry/blob/main/oled_wiring.jpg?raw=true "Fritzing wiring diagram")
+<img src="https://github.com/weto91/OledInfo-Raspberry/blob/main/oled_wiring.jpg?raw=true" width="358" height="400">
 
 ##Installation process
 The installation is so easy:
@@ -42,4 +42,7 @@ The installation is so easy:
 3. Run the installer
 `# ./tmp/OledInfo-Raspberry/installer.sh`
 4. Wait until the installation process finish and enjoy!
+
+## Results
+<img src="https://github.com/weto91/OledInfo-Raspberry/blob/main/IMG_3635.jpg?raw=true" width="358" height="400">
 
