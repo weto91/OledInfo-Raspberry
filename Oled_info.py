@@ -66,7 +66,7 @@ if __name__ == "__main__":
 		# Free RAM Memory percent
 		resultFreeMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $4}\' | tail -n +2')
 		resultTotMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $2}\' | tail -n +2')
-		resultTotMem = round(resultTotMem * 100 / resultFreeMem, 0)
+		resultTotMem = round(resultFreeMem * 100 / resultTotMem, 0)
 		memoryPercent = str(resultTotMem) 
 		textMEMShow = 'Free RAM  : %s' % memoryPercent
 		
