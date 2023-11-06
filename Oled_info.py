@@ -61,12 +61,12 @@ if __name__ == "__main__":
 	while True:
 		# CPU Temperature:
 		resultCPUTemp = proc_run('vcgencmd measure_temp | egrep -o \'[0-9]*\.[0-9]*\'')
-		textCPUShow = 'CPU Temp: %s ºC' % resultCPUTemp 
+		textCPUShow = 'CPU Temp: %s°C' % resultCPUTemp 
 		
 		# Free RAM Memory percent
 		resultFreeMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $4}\' | tail -n +2')
 		resultTotMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $2}\' | tail -n +2')
-		resultTotMem = round(resultFreeMem * 100 / resultTotMem, 0)
+		resultTotMem = round(float(resultFreeMem)* 100 / float(resultTotMem), 0)
 		memoryPercent = str(resultTotMem) 
 		textMEMShow = 'Free RAM  : %s' % memoryPercent
 		
