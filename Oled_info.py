@@ -61,22 +61,22 @@ if __name__ == "__main__":
 	while True:
 		# CPU Temperature:
 		resultCPUTemp = proc_run('vcgencmd measure_temp | egrep -o \'[0-9]*\.[0-9]*\'')
-		textCPUShow = 'CPU Temp: ' + resultCPUTemp + '°C'
+		textCPUShow = 'CPU Temp: %s ºC' % resultCPUTemp 
 		
 		# Free RAM Memory percent
 		resultFreeMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $4}\' | tail -n +2')
 		resultTotMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $2}\' | tail -n +2')
 		resultTotMem = round(resultTotMem, 0)
 		memoryPercent = str(resultFreeMem) 
-		textMEMShow = 'Free RAM  : ' + str(round(memoryPercent, 0)) + '%'
+		textMEMShow = 'Free RAM  : %s' % memoryPercent
 		
 		# Disk usage percent
 		resultUsaDisk = proc_run('df -h | grep "/dev/root" | awk -F" " \'{print $5}\'')
-		textDISKShow = 'D. Usage   : ' + resultUsaDisk
+		textDISKShow = 'D. Usage   : %s' % resultUsaDisk
 		
 		# Clock with hours and minutes
 		resultClock = proc_run('date +"%H:%M"')
-		textClockShow = 'Clock         : ' + resultClock
+		textClockShow = 'Clock         : %s' % resultClock
 
 		# Preparing the font and font size
 		font = ImageFont.truetype(fontType, 14)
