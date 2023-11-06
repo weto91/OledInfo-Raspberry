@@ -45,56 +45,67 @@ disp.show()
 image = Image.new('1', (128, 64))
 draw = ImageDraw.Draw(image)
 
+def proc_run(command) :
+	info = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+	return info.stdout.decode().strip()
+def displayer(img) :
+		disp.image(img)
+		disp.show()
+def rectangle_drawer(x1 ,x2, y1, y2 ):
+	draw.rectangle(((x1,x2),(y1,y2)), fill="black")
+def text_drawer(x,y, info,font):
+	draw.text((x, y), info, font=font, fill=255)
 
 # Loop to run the script non-stop
-while True:
-	# CPU Temperature:
-	resultCPUTemp = subprocess.run('vcgencmd measure_temp | egrep -o \'[0-9]*\.[0-9]*\'', shell=True, stdout=subprocess.PIPE)
-	textCPUShow = 'CPU Temp: ' + resultCPUTemp.stdout.decode().strip() + '°C'
-    
-    # Free RAM Memory percent
-    resultFreeMem = subprocess.run('free -m |head -n +2 | awk -F" " \'{print $4}\' | tail -n +2', shell=True, stdout=subprocess.PIPE)
-	resultTotMem = subprocess.run('free -m |head -n +2 | awk -F" " \'{print $2}\' | tail -n +2', shell=True, stdout=subprocess.PIPE)
-	memoryPercent = int(resultFreeMem.stdout.decode().strip()) * 100 / int(resultTotMem.stdout.decode().strip())
-    textMEMShow = 'Free RAM  : ' + str(round(memoryPercent, 0)) + '%'
-    
-    # Disk usage percent
-    resultUsaDisk = subprocess.run('df -h | grep "/dev/root" | awk -F" " \'{print $5}\'', shell=True, stdout=subprocess.PIPE)
-    textDISKShow = 'D. Usage   : ' + resultUsaDisk.stdout.decode().strip()
-    
-    # Clock with hours and minutes
-	resultClock = subprocess.run('date +"%H:%M"', shell=True, stdout=subprocess.PIPE)
-	textClockShow = 'Clock         : ' + resultClock.stdout.decode().strip()
+if __name__ == "__main__":
+	while True:
+		# CPU Temperature:
+		resultCPUTemp = proc_run('vcgencmd measure_temp | egrep -o \'[0-9]*\.[0-9]*\'')
+		textCPUShow = 'CPU Temp: ' + resultCPUTemp + '°C'
+		
+		# Free RAM Memory percent
+		resultFreeMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $4}\' | tail -n +2')
+		resultTotMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $2}\' | tail -n +2')
+		resultTotMem = round(resultTotMem, 0)
+		memoryPercent = str(resultFreeMem) 
+		textMEMShow = 'Free RAM  : ' + str(round(memoryPercent, 0)) + '%'
+		
+		# Disk usage percent
+		resultUsaDisk = proc_run('df -h | grep "/dev/root" | awk -F" " \'{print $5}\'')
+		textDISKShow = 'D. Usage   : ' + resultUsaDisk
+		
+		# Clock with hours and minutes
+		resultClock = proc_run('date +"%H:%M"')
+		textClockShow = 'Clock         : ' + resultClock
 
-	# Preparing the font and font size
-	font = ImageFont.truetype(fontType, 14)
+		# Preparing the font and font size
+		font = ImageFont.truetype(fontType, 14)
 
-	
-	if resultCPUTemp.stdout.decode().strip() != tempCPU:
-		draw.rectangle(((80, 1), (128, 16)), fill="black")
-	if str(round(memoryPercent, 0)) != freeMem:
-		draw.rectangle(((80, 17), (128, 32)), fill="black")
-	if resultUsaDisk.stdout.decode().strip() != diskUsage:
-		draw.rectangle(((80, 33), (128, 48)), fill="black")
-	if resultClock.stdout.decode().strip() != timeCus:
-		draw.rectangle(((80, 49), (128, 64)), fill="black")
+		
+		if resultCPUTemp != tempCPU:
+			rectangle_drawer(80, 1 ,128, 16)
+		if memoryPercent != freeMem:
+			rectangle_drawer(80, 17 ,128, 32)
+		if resultUsaDisk != diskUsage:
+			rectangle_drawer(80, 33,128, 48)
+		if resultClock != timeCus:
+			rectangle_drawer(80, 49, 128, 64)
 
-	disp.image(image)
-	disp.show()
-	# Writing the text (X pixel, Y pixel, text, font, Color: For monochromatic Oled screen, 255 is OK.)):
-	draw.text((0, 1), textCPUShow, font=font, fill=255)
-	draw.text((0, 17), textMEMShow, font=font, fill=255)
-	draw.text((0, 33), textDISKShow, font=font, fill=255)
-	draw.text((0, 49), textClockShow, font=font, fill=255)
+		displayer(image)
 
-	# Show the written text:
-	disp.image(image)
-	disp.show()
-    
-    # Copying the results to the main variables to compare it in the next loop
-	tempCPU = resultCPUTemp.stdout.decode().strip()
-	freeMem = str(round(memoryPercent, 0))
-	diskUsage = resultUsaDisk.stdout.decode().strip()
-	timeCus = resultClock.stdout.decode().strip()
-    # Timer to wait the next loop. 
-	time.sleep(4) # You can change this number (seconds). > if you need the service to use fewer resources or < If you need the screen to refresh the information faster.
+		# Writing the text (X pixel, Y pixel, text, font, Color: For monochromatic Oled screen, 255 is OK.)):
+		text_drawer(0, 1, textCPUShow, font=font)
+		text_drawer(0, 17, textMEMShow, font=font)
+		text_drawer(0, 33, textDISKShow, font=font)
+		text_drawer(0, 49, textClockShow, font=font)
+
+		# Show the written text:
+		displayer(image)
+		
+		# Copying the results to the main variables to compare it in the next loop
+		tempCPU = resultCPUTemp
+		freeMem = memoryPercent
+		diskUsage = resultUsaDisk
+		timeCus = resultClock
+		# Timer to wait the next loop. 
+		time.sleep(4) # You can change this number (seconds). > if you need the service to use fewer resources or < If you need the screen to refresh the information faster.
