@@ -67,8 +67,8 @@ if __name__ == "__main__":
 		resultFreeMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $4}\' | tail -n +2')
 		resultTotMem = proc_run('free -m |head -n +2 | awk -F" " \'{print $2}\' | tail -n +2')
 		resultTotMem = round(float(resultFreeMem)* 100 / float(resultTotMem), 0)
-		memoryPercent = str(resultTotMem) 
-		textMEMShow = 'Free RAM  : %s%' % memoryPercent
+		memoryPercent = str(int(resultTotMem)) 
+		textMEMShow = 'Free RAM  : %s' % memoryPercent + "%"
 		
 		# Disk usage percent
 		resultUsaDisk = proc_run('df -h | grep "/dev/root" | awk -F" " \'{print $5}\'')
