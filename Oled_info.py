@@ -49,8 +49,8 @@ def proc_run(command) :
 	info = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
 	return info.stdout.decode().strip()
 def displayer(img) :
-		disp.image(img)
-		disp.show()
+	disp.image(img)
+	disp.show()
 def rectangle_drawer(x1 ,x2, y1, y2 ):
 	draw.rectangle(((x1,x2),(y1,y2)), fill="black")
 def text_drawer(x,y, info,font):
